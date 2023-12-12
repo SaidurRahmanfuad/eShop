@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/llBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="3.90dp"
+        android:background="@color/design_default_color_primary"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/transparent">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="14.30dp" />
+
+                <LinearLayout
+                    android:id="@+id/llBottmLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    android:paddingTop="6dp"
+
+                    android:paddingBottom="6.50dp">
+
+                    <LinearLayout
+                        android:id="@+id/llSearchFromBottom"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:layout_marginTop="3.90dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/ivBottomSearch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                 <!--       <com.example.ciyashop.customview.textview.TextViewRegular
+                            android:id="@+id/tvBottomSearch"
+                            style="@style/txt_white_micro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/value_1.5"
+                            android:text="@string/searchs" />-->
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Search"
+                            android:layout_marginTop="3dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llCart"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="3.90dp"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llmainCart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/ivBottomCart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_launcher_background" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="My Cart"
+                                android:layout_marginTop="3dp"/>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:id="@+id/llMyAccount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:layout_marginTop="3.90dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/ivBottomAccount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Account"
+                            android:layout_marginTop="3dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llWishList"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:layout_marginTop="3.90dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/ivBottomWishList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wish List"
+                            android:layout_marginTop="3dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+          <!--  <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivCenterBg"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/ic_bottom_bg"
+                    android:padding="@dimen/value_6"
+                    app:elevation="6dp"
+                    app:pressedTranslationZ="12dp" />
+
+                <LinearLayout
+                    android:id="@+id/llHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/ivBottomHome"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:background="@drawable/white_bg"
+                        android:padding="@dimen/value_6"
+                        app:elevation="6dp"
+                        app:srcCompat="@drawable/ic_home" />
+
+                </LinearLayout>
+
+            </FrameLayout>-->
+
+<!--            <com.example.ciyashop.customview.textview.TextViewRegular
+                android:id="@+id/tvBottomCartCount"
+                style="@style/txt_white_micro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_96sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/black_round_corner_button"
+                android:gravity="end|top"
+                android:maxLines="1"
+                android:paddingStart="@dimen/value_3"
+                android:paddingLeft="@dimen/value_3"
+                android:paddingTop="@dimen/value_1.5"
+                android:paddingEnd="@dimen/value_3"
+                android:paddingRight="@dimen/value_3"
+                android:paddingBottom="@dimen/value_1.5"
+                android:text="1" />-->
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</merge>
