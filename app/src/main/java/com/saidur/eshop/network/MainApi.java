@@ -7,4 +7,7 @@ public interface MainApi {
     @GET("api/ecom/v1/banner/get-banners")
     Call<BannerResponse> GetBanner();
 
+    @GET("api/v1/category/get-categorys")
+    Call<CategoryResponse> GetCategory();
+
 }

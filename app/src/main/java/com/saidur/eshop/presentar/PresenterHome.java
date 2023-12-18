@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.saidur.eshop.interfac.IHome;
 import com.saidur.eshop.network.BannerResponse;
+import com.saidur.eshop.network.CategoryResponse;
 import com.saidur.eshop.network.MainApi;
 import com.saidur.eshop.network.RetrofitClientInstance;
 
@@ -47,5 +48,34 @@ public class PresenterHome implements IHome.Presenter {
         } catch (Exception exception) {
             Log.e("TAG", "getBanner: ",exception.getCause() );
         }
+    }
+
+    @Override
+    public void getCategory() {
+        try {
+            MainApi service = RetrofitClientInstance.getRetrofitInstance().create(MainApi.class);
+            Call<CategoryResponse> call = service.GetCategory();
+            call.enqueue(new Callback<CategoryResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<CategoryResponse> call, @NonNull Response<CategoryResponse> response) {
+                    if(response.isSuccessful())
+                    {
+                        view.onViewCategory(response.body().getResult());
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "getBanner: ",t.getCause() );
+                }
+            });
+        } catch (Exception exception) {
+            Log.e("TAG", "getBanner: ",exception.getCause() );
+        }
+    }
+
+    @Override
+    public void getProductList() {
+
     }
 }

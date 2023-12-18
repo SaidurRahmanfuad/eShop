@@ -7,7 +7,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
@@ -19,12 +21,15 @@ import android.widget.LinearLayout;
 
 import com.saidur.eshop.R;
 import com.saidur.eshop.adapter.BannerViewPagerAdapter;
+import com.saidur.eshop.adapter.CategoryAdapter;
 import com.saidur.eshop.databinding.FragmentHomeBinding;
 import com.saidur.eshop.interfac.IHome;
 import com.saidur.eshop.model.ModelBanner;
+import com.saidur.eshop.model.ModelCategory;
 import com.saidur.eshop.presentar.PresenterHome;
 import com.saidur.eshop.utils.Consts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentHome extends Fragment implements IHome.view {
@@ -35,18 +40,18 @@ public class FragmentHome extends Fragment implements IHome.view {
     private int currentPosition;
     private boolean isAutoScroll = false;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
+    private CategoryAdapter catAdapter;
     public FragmentHome() {
         // Required empty public constructor
     }
 
     public static FragmentHome newInstance(String param1, String param2) {
-        FragmentHome fragment = new FragmentHome();
-    /*
+        /*
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);*/
-        return fragment;
+        return new FragmentHome();
     }
 
     @Override
@@ -65,7 +70,9 @@ public class FragmentHome extends Fragment implements IHome.view {
         presenter=new PresenterHome(this, requireActivity());
 
         presenter.getBanner();
+        presenter.getCategory();
         setView();
+        setCatView();
         return binding.getRoot();
     }
 
@@ -87,11 +94,56 @@ public class FragmentHome extends Fragment implements IHome.view {
             binding.mainDiv.llBanner.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    public void onViewCategory(List<ModelCategory> result) {
+        binding.mainDiv.rvTopCategory.setVisibility(View.VISIBLE);
+        if (result != null) {
+            List<ModelCategory> mainCategoryList = new ArrayList<>();
+            if (result.size() > 0) {
+                if (result.size() > 3) {
+                    for (int i = 0; i <= 3; i++) {
+                        mainCategoryList.add(result.get(i));
+                    }
+                } else {
+                    mainCategoryList.addAll(result);
+                }
+                ModelCategory mainCategory = new ModelCategory();
+                mainCategory.setCategoryName("More");
+                mainCategoryList.add(mainCategory);
+                catAdapter.addAll(mainCategoryList);
+                binding.mainDiv.llTopCategory.setVisibility(View.VISIBLE);
+
+            } else {
+                binding.mainDiv.llTopCategory.setVisibility(View.GONE);
+            }
+        } else {
+            binding.mainDiv.llTopCategory.setVisibility(View.GONE);
+        }
+    }
+
+    public void setCatView(){
+        catAdapter = new CategoryAdapter(requireActivity());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
+        binding.mainDiv.rvTopCategory.setLayoutManager(mLayoutManager);
+        binding.mainDiv.rvTopCategory.setAdapter(catAdapter);
+        binding.mainDiv.rvTopCategory.setNestedScrollingEnabled(false);
+        ViewCompat.setNestedScrollingEnabled(binding.mainDiv.rvTopCategory, false);
+        binding.mainDiv.rvTopCategory.setHasFixedSize(true);
+        binding.mainDiv.rvTopCategory.setItemViewCacheSize(20);
+
+        binding.mainDiv.rvTopCategory.setDrawingCacheEnabled(true);
+        binding.mainDiv.rvTopCategory.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+    }
+    @Override
+    public void onViewProductList(List<ModelBanner> result) {
+
+    }
+    
     public SharedPreferences getPreferences() {
         sharedpreferences = requireActivity().getSharedPreferences(Consts.MyPREFERENCES, Context.MODE_PRIVATE);
         return sharedpreferences;
     }
-
     private void setView() {
         bannerViewPagerAdapter = new BannerViewPagerAdapter(requireActivity());
         binding.mainDiv.vpBanner.setAdapter(bannerViewPagerAdapter);
