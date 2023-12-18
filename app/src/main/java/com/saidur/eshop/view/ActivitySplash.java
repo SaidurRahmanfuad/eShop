@@ -18,6 +18,7 @@ ActivitySplashBinding binding;
         setContentView(binding.getRoot());
         setCurrentYear(binding.tvSplashText);
         clearUser();
+        homeOrIntroActivity();
     }
 
     public void startActivityIntent(final Intent intent) {

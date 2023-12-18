@@ -5,6 +5,7 @@ public class Consts {
     public static String SECOND_COLOR = "secondary_color";
     public static String HEADER_COLOR = "header_color";
     public static String HEAD_COLOR = "#f3f8fc";
+    public static final String PRIMARY_COLOR = "#f3f8fc";
     public static String ADDRESS_LINE1 = "address_line1";
     public static String ADDRESS_LINE2 = "address_line2";
     public static String PHONE = "phone_number";

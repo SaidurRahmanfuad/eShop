@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -18,13 +19,17 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.widget.NestedScrollView;
 
 import com.saidur.eshop.utils.Consts;
 import com.saidur.eshop.utils.CustomPD;
@@ -39,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
     public ImageView ivWhatsappDrag;
     public SharedPreferences sharedpreferences;
     public CustomPD pd;
+    public LinearLayout llHome, llSearchFromBottom, llCart, llAccount, llWishList, llBottomBar, llBottomLine;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,4 +237,149 @@ public class BaseActivity extends AppCompatActivity {
             pd.dissmissDialog();
         }
     }
+
+   /* public void setBottomBar(final String activity, final NestedScrollView view) {
+        llHome = findViewById(R.id.llHome);
+        llSearchFromBottom = findViewById(R.id.llSearchFromBottom);
+        llCart = findViewById(R.id.llCart);
+        llAccount = findViewById(R.id.llMyAccount);
+        llWishList = findViewById(R.id.llWishList);
+        llBottomBar = findViewById(R.id.llBottomBar);
+        llBottomLine = findViewById(R.id.llBottmLine);
+
+        views = findViewById(R.id.view);
+        final ImageView ivBottomHome = findViewById(R.id.ivBottomHome);
+        ImageView ivBottomSearch = findViewById(R.id.ivBottomSearch);
+        ImageView ivBottomCart = findViewById(R.id.ivBottomCart);
+        ImageView ivBottomAccount = findViewById(R.id.ivBottomAccount);
+        ImageView ivBottomWishList = findViewById(R.id.ivBottomWishList);
+        ImageView ivCenterBg = findViewById(R.id.ivCenterBg);
+
+        TextView tvBottomSearch = findViewById(R.id.tvBottomSearch);
+        TextView tvBottomCart = findViewById(R.id.tvBottomCart);
+        TextView tvBottomAccount = findViewById(R.id.tvBottomAccount);
+        TextView tvBottomWishList = findViewById(R.id.tvBottomWishList);
+        TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
+
+        tvBottomSearch.setText(getResources().getString(R.string.searchs));
+        tvBottomCart.setText(getResources().getString(R.string.cart));
+        tvBottomAccount.setText(getResources().getString(R.string.account));
+        tvBottomWishList.setText(getResources().getString(R.string.my_wish_list));
+
+        if (Config.IS_CATALOG_MODE_OPTION) {
+            llCart.setVisibility(View.VISIBLE);
+            tvBottomCartCount.setVisibility(View.GONE);
+            ivBottomCart.setImageResource(R.drawable.ic_coupon);
+            tvBottomCart.setText(getResources().getString(R.string.my_reward));
+        } else {
+            llCart.setVisibility(View.VISIBLE);
+            if (new DatabaseHelper(this).getFromCart(0).size() > 0) {
+                tvBottomCartCount.setText(String.valueOf(new DatabaseHelper(this).getFromCart(0).size()));
+                tvBottomCartCount.setVisibility(View.VISIBLE);
+            } else {
+                tvBottomCartCount.setVisibility(View.GONE);
+            }
+            ivBottomCart.setImageResource(R.drawable.ic_cart_gray);
+            tvBottomCart.setText(getResources().getString(R.string.cart));
+        }
+        views.setBackgroundColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+        ivBottomHome.setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+        Drawable unwrappedDrawable = ivCenterBg.getBackground();
+        Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+        DrawableCompat.setTint(wrappedDrawable, (Color.parseColor((getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)))));
+
+        unwrappedDrawable = ivBottomHome.getBackground();
+        wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+        DrawableCompat.setTint(wrappedDrawable, (Color.parseColor((getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)))));
+
+        unwrappedDrawable = tvBottomCartCount.getBackground();
+        wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+        DrawableCompat.setTint(wrappedDrawable, Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+        tvBottomCartCount.setTextColor(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+        llBottomLine.setBackgroundColor(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+
+        switch (activity) {
+            case "home":
+            case "list":
+                ivBottomHome.setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+                break;
+            case "search":
+                ivBottomSearch.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                tvBottomSearch.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                break;
+            case "cart":
+                ivBottomCart.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                tvBottomCart.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                break;
+            case "account":
+                ivBottomAccount.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                tvBottomAccount.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                break;
+            case "wishList":
+                ivBottomWishList.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                tvBottomWishList.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
+                break;
+        }
+//        tvBottomCartCount.getBackground().setColorFilter(Color.parseColor(getPreferences().getString(Constant.SECOND_COLOR, Constant.SECONDARY_COLOR)), PorterDuff.Mode.SRC_IN);
+        llHome.setOnClickListener(v -> {
+            if (!activity.equals("home")) {
+                Intent intent = new Intent(BaseActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        llSearchFromBottom.setOnClickListener(v -> {
+            if (!activity.equals("search")) {
+                Intent intent = new Intent(BaseActivity.this, SearchCategoryListActivity.class);
+                startActivity(intent);
+                if (!activity.equals("home")) {
+                    finish();
+                }
+            }
+        });
+        llCart.setOnClickListener(v -> {
+            if (!Config.IS_CATALOG_MODE_OPTION) {
+                if (!activity.equals("cart")) {
+                    Intent intent = new Intent(BaseActivity.this, CartActivity.class);
+                    startActivity(intent);
+                    if (!activity.equals("home")) {
+                        finish();
+                    }
+                }
+            } else {
+                Intent intent = new Intent(BaseActivity.this, RewardsActivity.class);
+                startActivity(intent);
+            }
+        });
+        llAccount.setOnClickListener(v -> {
+            if (!activity.equals("account")) {
+                Intent intent = new Intent(BaseActivity.this, AccountActivity.class);
+                startActivity(intent);
+                if (!activity.equals("home")) {
+                    finish();
+                }
+            }
+        });
+
+        llWishList.setOnClickListener(v -> {
+            if (!activity.equals("wishList")) {
+                Intent intent = new Intent(BaseActivity.this, WishListActivity.class);
+                startActivity(intent);
+                if (!activity.equals("home")) {
+                    finish();
+                }
+            }
+        });
+
+        ViewTreeObserver vto = llBottomBar.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                llBottomBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (view != null) {
+                    view.setPadding(0, 0, 0, llBottomBar.getMeasuredHeight());
+                }
+            }
+        });
+    }*/
 }
