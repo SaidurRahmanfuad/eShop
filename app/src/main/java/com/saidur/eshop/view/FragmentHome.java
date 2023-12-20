@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
@@ -22,10 +24,13 @@ import android.widget.LinearLayout;
 import com.saidur.eshop.R;
 import com.saidur.eshop.adapter.BannerViewPagerAdapter;
 import com.saidur.eshop.adapter.CategoryAdapter;
+import com.saidur.eshop.adapter.ProductAdapter;
+import com.saidur.eshop.customview.GridSpacingItemDecoration;
 import com.saidur.eshop.databinding.FragmentHomeBinding;
 import com.saidur.eshop.interfac.IHome;
 import com.saidur.eshop.model.ModelBanner;
 import com.saidur.eshop.model.ModelCategory;
+import com.saidur.eshop.model.ModelProduct;
 import com.saidur.eshop.presentar.PresenterHome;
 import com.saidur.eshop.utils.Consts;
 
@@ -41,6 +46,7 @@ public class FragmentHome extends Fragment implements IHome.view {
     private boolean isAutoScroll = false;
     private BannerViewPagerAdapter bannerViewPagerAdapter;
     private CategoryAdapter catAdapter;
+    private ProductAdapter productadapter;
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -68,12 +74,33 @@ public class FragmentHome extends Fragment implements IHome.view {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
         presenter=new PresenterHome(this, requireActivity());
+        setView();
+        setCatView();
 
         presenter.getBanner();
         presenter.getCategory();
-        setView();
-        setCatView();
+        presenter.getProductList();
+
         return binding.getRoot();
+    }
+
+    private void setProductView(List<ModelProduct> result) {
+        binding.mainDiv.llmenusTwo.removeAllViews();
+        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dynamic_mostpopuler, null);
+        RecyclerView rvProducts = view.findViewById(R.id.rvProducts);
+
+        productadapter = new ProductAdapter(requireActivity(),result);
+        rvProducts.setHasFixedSize(true);
+        rvProducts.setNestedScrollingEnabled(false);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(requireActivity(), 2);
+        rvProducts.setLayoutManager(mLayoutManager);
+        rvProducts.setAdapter(productadapter);
+        rvProducts.addItemDecoration(new GridSpacingItemDecoration(2, 10, true));
+        binding.mainDiv.llmenusTwo.addView(view);
+
+
     }
 
     @Override
@@ -136,10 +163,10 @@ public class FragmentHome extends Fragment implements IHome.view {
         binding.mainDiv.rvTopCategory.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
     }
     @Override
-    public void onViewProductList(List<ModelBanner> result) {
-
+    public void onViewProductList(List<ModelProduct> result) {
+        setProductView(result);
     }
-    
+
     public SharedPreferences getPreferences() {
         sharedpreferences = requireActivity().getSharedPreferences(Consts.MyPREFERENCES, Context.MODE_PRIVATE);
         return sharedpreferences;

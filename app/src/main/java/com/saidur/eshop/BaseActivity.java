@@ -11,9 +11,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -35,6 +37,8 @@ import com.saidur.eshop.utils.Consts;
 import com.saidur.eshop.utils.CustomPD;
 import com.saidur.eshop.utils.RequestParamUtils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -238,148 +242,54 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-   /* public void setBottomBar(final String activity, final NestedScrollView view) {
-        llHome = findViewById(R.id.llHome);
-        llSearchFromBottom = findViewById(R.id.llSearchFromBottom);
-        llCart = findViewById(R.id.llCart);
-        llAccount = findViewById(R.id.llMyAccount);
-        llWishList = findViewById(R.id.llWishList);
-        llBottomBar = findViewById(R.id.llBottomBar);
-        llBottomLine = findViewById(R.id.llBottmLine);
-
-        views = findViewById(R.id.view);
-        final ImageView ivBottomHome = findViewById(R.id.ivBottomHome);
-        ImageView ivBottomSearch = findViewById(R.id.ivBottomSearch);
-        ImageView ivBottomCart = findViewById(R.id.ivBottomCart);
-        ImageView ivBottomAccount = findViewById(R.id.ivBottomAccount);
-        ImageView ivBottomWishList = findViewById(R.id.ivBottomWishList);
-        ImageView ivCenterBg = findViewById(R.id.ivCenterBg);
-
-        TextView tvBottomSearch = findViewById(R.id.tvBottomSearch);
-        TextView tvBottomCart = findViewById(R.id.tvBottomCart);
-        TextView tvBottomAccount = findViewById(R.id.tvBottomAccount);
-        TextView tvBottomWishList = findViewById(R.id.tvBottomWishList);
-        TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
-
-        tvBottomSearch.setText(getResources().getString(R.string.searchs));
-        tvBottomCart.setText(getResources().getString(R.string.cart));
-        tvBottomAccount.setText(getResources().getString(R.string.account));
-        tvBottomWishList.setText(getResources().getString(R.string.my_wish_list));
-
-        if (Config.IS_CATALOG_MODE_OPTION) {
-            llCart.setVisibility(View.VISIBLE);
-            tvBottomCartCount.setVisibility(View.GONE);
-            ivBottomCart.setImageResource(R.drawable.ic_coupon);
-            tvBottomCart.setText(getResources().getString(R.string.my_reward));
-        } else {
-            llCart.setVisibility(View.VISIBLE);
-            if (new DatabaseHelper(this).getFromCart(0).size() > 0) {
-                tvBottomCartCount.setText(String.valueOf(new DatabaseHelper(this).getFromCart(0).size()));
-                tvBottomCartCount.setVisibility(View.VISIBLE);
-            } else {
-                tvBottomCartCount.setVisibility(View.GONE);
-            }
-            ivBottomCart.setImageResource(R.drawable.ic_cart_gray);
-            tvBottomCart.setText(getResources().getString(R.string.cart));
-        }
-        views.setBackgroundColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-        ivBottomHome.setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-        Drawable unwrappedDrawable = ivCenterBg.getBackground();
+    public void showDiscount(TextView tvDiscount, String salePrice, String regularPrice) {
+        tvDiscount.setVisibility(View.VISIBLE);
+        Drawable unwrappedDrawable = tvDiscount.getBackground();
         Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-        DrawableCompat.setTint(wrappedDrawable, (Color.parseColor((getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)))));
-
-        unwrappedDrawable = ivBottomHome.getBackground();
-        wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-        DrawableCompat.setTint(wrappedDrawable, (Color.parseColor((getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)))));
-
-        unwrappedDrawable = tvBottomCartCount.getBackground();
-        wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-        DrawableCompat.setTint(wrappedDrawable, Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-        tvBottomCartCount.setTextColor(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-        llBottomLine.setBackgroundColor(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-
-        switch (activity) {
-            case "home":
-            case "list":
-                ivBottomHome.setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-                break;
-            case "search":
-                ivBottomSearch.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                tvBottomSearch.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                break;
-            case "cart":
-                ivBottomCart.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                tvBottomCart.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                break;
-            case "account":
-                ivBottomAccount.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                tvBottomAccount.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                break;
-            case "wishList":
-                ivBottomWishList.setColorFilter(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                tvBottomWishList.setTextColor(Color.parseColor(getPreferences().getString(Consts.APP_COLOR, Consts.PRIMARY_COLOR)));
-                break;
-        }
-//        tvBottomCartCount.getBackground().setColorFilter(Color.parseColor(getPreferences().getString(Constant.SECOND_COLOR, Constant.SECONDARY_COLOR)), PorterDuff.Mode.SRC_IN);
-        llHome.setOnClickListener(v -> {
-            if (!activity.equals("home")) {
-                Intent intent = new Intent(BaseActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        llSearchFromBottom.setOnClickListener(v -> {
-            if (!activity.equals("search")) {
-                Intent intent = new Intent(BaseActivity.this, SearchCategoryListActivity.class);
-                startActivity(intent);
-                if (!activity.equals("home")) {
-                    finish();
-                }
-            }
-        });
-        llCart.setOnClickListener(v -> {
-            if (!Config.IS_CATALOG_MODE_OPTION) {
-                if (!activity.equals("cart")) {
-                    Intent intent = new Intent(BaseActivity.this, CartActivity.class);
-                    startActivity(intent);
-                    if (!activity.equals("home")) {
-                        finish();
-                    }
-                }
+        DrawableCompat.setTint(wrappedDrawable, (Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR))));
+        if (salePrice != null && !salePrice.equals("") && !salePrice.equals("0.0")) {
+            String discount = getDiscount(regularPrice, salePrice);
+            if (!discount.equals("")) {
+                String strDiscount = discount + " Off";
+                tvDiscount.setText(strDiscount);
             } else {
-                Intent intent = new Intent(BaseActivity.this, RewardsActivity.class);
-                startActivity(intent);
+                tvDiscount.setVisibility(View.GONE);
             }
-        });
-        llAccount.setOnClickListener(v -> {
-            if (!activity.equals("account")) {
-                Intent intent = new Intent(BaseActivity.this, AccountActivity.class);
-                startActivity(intent);
-                if (!activity.equals("home")) {
-                    finish();
-                }
-            }
-        });
+        } else {
+            tvDiscount.setVisibility(View.GONE);
+        }
+    }
 
-        llWishList.setOnClickListener(v -> {
-            if (!activity.equals("wishList")) {
-                Intent intent = new Intent(BaseActivity.this, WishListActivity.class);
-                startActivity(intent);
-                if (!activity.equals("home")) {
-                    finish();
-                }
-            }
-        });
+    public String getDiscount(String originalPrice, String salePrice) {
+        try {
+            Float originalPrices = Float.parseFloat(getPrice(originalPrice));
+            Float salePrices = Float.parseFloat(getPrice(salePrice));
+            Float priceDiff = originalPrices - salePrices;
+            Double discount = (double) (priceDiff / originalPrices * 100);
+            return Consts.setDecimalTwo(discount) + "%";
+        } catch (Exception e) {
+            Log.e("Exception is =", e.getMessage() + "");
+            return "";
+        }
+    }
 
-        ViewTreeObserver vto = llBottomBar.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                llBottomBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                if (view != null) {
-                    view.setPadding(0, 0, 0, llBottomBar.getMeasuredHeight());
-                }
-            }
-        });
-    }*/
+    public String getPrice(String price) {
+        price = price.replace("\\s+", "");
+        price = price.replace(Consts.THOUSANDSSEPRETER, "");
+        price = price.replace(Consts.CURRENCYSYMBOL, "");
+        return price;
+    }
+
+    public void setPrice(TextView tvPrice, String price) {
+        Log.e(TAG, "setPrice: " + price);
+        if (price != null) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tvPrice.setText(Html.fromHtml(price + "", Html.FROM_HTML_MODE_COMPACT));
+            tvPrice.setText(Consts.CURRENCYSYMBOL+""+getPrice(price));
+        } else {
+            tvPrice.setText(Html.fromHtml(price));
+        }
+
+    }
+
+
 }

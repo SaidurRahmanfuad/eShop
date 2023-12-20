@@ -9,6 +9,7 @@ import com.saidur.eshop.interfac.IHome;
 import com.saidur.eshop.network.BannerResponse;
 import com.saidur.eshop.network.CategoryResponse;
 import com.saidur.eshop.network.MainApi;
+import com.saidur.eshop.network.ProductResponse;
 import com.saidur.eshop.network.RetrofitClientInstance;
 
 
@@ -76,6 +77,25 @@ public class PresenterHome implements IHome.Presenter {
 
     @Override
     public void getProductList() {
+        try {
+            MainApi service = RetrofitClientInstance.getRetrofitInstance().create(MainApi.class);
+            Call<ProductResponse> call = service.GetProducts();
+            call.enqueue(new Callback<ProductResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<ProductResponse> call, @NonNull Response<ProductResponse> response) {
+                    if(response.isSuccessful())
+                    {
+                        view.onViewProductList(response.body().getResult());
+                    }
+                }
 
+                @Override
+                public void onFailure(@NonNull Call<ProductResponse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "getProduct: ",t.getCause() );
+                }
+            });
+        } catch (Exception exception) {
+            Log.e("TAG", "getProduct: ",exception.getCause() );
+        }
     }
 }

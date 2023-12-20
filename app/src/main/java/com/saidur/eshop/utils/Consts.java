@@ -1,5 +1,11 @@
 package com.saidur.eshop.utils;
 
+import android.util.Log;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 public class Consts {
     public static String APP_COLOR = "primary_color";
     public static String SECOND_COLOR = "secondary_color";
@@ -15,6 +21,53 @@ public class Consts {
     public static final String MyPREFERENCES = "com.saidur.eshop"; // Add your package name
     public static boolean IS_WPML_ACTIVE = false;
 
+    public static String THOUSANDSSEPRETER = ",";
+    public static String DECIMALSEPRETER = ".";
+    public static String CURRENCYSYMBOL = "৳";
+    public static int Decimal = 2;
     //Colors
     public static String SECONDARY_COLOR = "#1d345f";
+
+    public static String setDecimalTwo(Double digit) {
+        return new DecimalFormat("##.##").format(digit);
+    }
+
+    public static String setDecimalOne(Double digit) {
+        return new DecimalFormat("##.#").format(digit);
+    }
+
+    public static String setDecimal(Double digit) {
+
+        StringBuilder decimal = new StringBuilder("#,##0.");
+
+        if (Consts.Decimal == 0) {
+            decimal = new StringBuilder("#,##0");
+        }
+        if ((digit == Math.floor(digit)) && !Double.isInfinite(digit)) {
+            // integer type
+            for (int i = 0; i < Consts.Decimal; i++) {
+                decimal.append("0");
+            }
+        } else {
+            for (int i = 0; i < Consts.Decimal; i++) {
+                decimal.append("#");
+            }
+        }
+
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(Locale.US);
+        if (Consts.Decimal != 0 && !Consts.THOUSANDSSEPRETER.equals("")) {
+            unusualSymbols.setDecimalSeparator(Consts.DECIMALSEPRETER.charAt(0));
+        }
+
+        if (!Consts.THOUSANDSSEPRETER.equals("")) {
+            unusualSymbols.setGroupingSeparator(Consts.THOUSANDSSEPRETER.charAt(0));
+        }
+
+//        String strange = "#,##0.000";
+        DecimalFormat weirdFormatter = new DecimalFormat(decimal.toString(), unusualSymbols);
+        weirdFormatter.setGroupingSize(3);
+        String data = weirdFormatter.format(digit);
+        Log.e("data is ", data + "");
+        return data + "";
+    }
 }

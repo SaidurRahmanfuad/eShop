@@ -77,8 +77,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             }
         }
 
-        if (list.get(position).getCategoryName() != null && !list.get(position).getCategoryName().equals("")) {
-            holder.tvName.setText(list.get(position).getCategoryName());
+        if (mainCategory.getCategoryName() != null && !mainCategory.getCategoryName().equals("")) {
+            holder.tvName.setText(mainCategory.getCategoryName());
         }
         holder.tvName.setTextColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
 
@@ -110,7 +110,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
-
         LinearLayout llMain;
         FrameLayout flImage;
         ImageView ivImage;

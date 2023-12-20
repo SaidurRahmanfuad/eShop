@@ -10,4 +10,6 @@ public interface MainApi {
     @GET("api/v1/category/get-categorys")
     Call<CategoryResponse> GetCategory();
 
+    @GET("api/ecom/v1/product/get-products")
+    Call<ProductResponse> GetProducts();
 }
