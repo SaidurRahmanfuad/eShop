@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import com.saidur.eshop.BaseActivity;
 import com.saidur.eshop.R;
 import com.saidur.eshop.customlistener.OnDtlsListenerProduct;
+import com.saidur.eshop.model.AddToCart;
 import com.saidur.eshop.model.ModelImage;
 import com.saidur.eshop.model.ModelProduct;
 import com.saidur.eshop.model.ModelProductDtls;
@@ -103,6 +104,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         } else {
             holder.ratingBar.setRating(0);
         }
+
+        new AddToCart(activity).addToCart(holder.ivAddToCart, new Gson().toJson(list.get(position)));
         // holder.main.setOnClickListener(view -> getProductDetail(String.valueOf(list.get(position).id)));
     }
 

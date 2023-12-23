@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.saidur.eshop.BaseFragment;
 import com.saidur.eshop.R;
 import com.saidur.eshop.adapter.BannerViewPagerAdapter;
 import com.saidur.eshop.adapter.CategoryAdapter;
@@ -37,7 +38,7 @@ import com.saidur.eshop.utils.Consts;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentHome extends Fragment implements IHome.view {
+public class FragmentHome extends BaseFragment implements IHome.view {
     FragmentHomeBinding binding;
     PresenterHome presenter;
     SharedPreferences sharedpreferences;

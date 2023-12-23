@@ -7,6 +7,9 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class Consts {
+    public static boolean Is_what =false;
+    public static boolean IS_LOGIN_SHOW = true;
+    public static boolean IS_ADD_TO_CART_ACTIVE = true;
     public static String APP_COLOR = "primary_color";
     public static String SECOND_COLOR = "secondary_color";
     public static String HEADER_COLOR = "header_color";
@@ -17,7 +20,7 @@ public class Consts {
     public static String PHONE = "phone_number";
     public static String WHATSAPP = "whatsapp_number";
     public static String WHATSAPPENABLE = "whatsappFloatingButton";
-
+    public static boolean IS_CATALOG_MODE_OPTION = false;
     public static final String MyPREFERENCES = "com.saidur.eshop"; // Add your package name
     public static boolean IS_WPML_ACTIVE = false;
 

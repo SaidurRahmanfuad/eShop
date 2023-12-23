@@ -64,7 +64,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Search" />
+                        android:text="Search"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -93,9 +94,11 @@
                             app:tint="@color/white" />
 
                         <TextView
+                            android:id="@+id/tv_cart_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
+                            android:textColor="@color/white"
                             android:text="My Cart" />
 
                     </LinearLayout>
@@ -135,7 +138,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Account" />
+                        android:text="Account"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -160,7 +164,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Wish List" />
+                        android:text="Wish List"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 

@@ -43,7 +43,8 @@
                         android:background="@drawable/ic_off_bg"
                         android:gravity="center"
                         android:rotation="90"
-                        android:text="120" />
+                        android:textColor="@color/white"
+                        android:text="" />
 
                  <!--   <com.example.ciyashop.customview.like.animation.SparkButton
                         android:id="@+id/ivWishList"

@@ -73,7 +73,8 @@
                                 <androidx.viewpager.widget.ViewPager
                                     android:id="@+id/vpBanner"
                                     android:layout_width="match_parent"
-                                    android:layout_height="200dp" />
+                                    android:layout_height="200dp"
+                                    tools:ignore="SpeakableTextPresentCheck" />
 
                                 <LinearLayout
                                     android:id="@+id/layoutDots"
@@ -130,7 +131,8 @@
                             <com.saidur.eshop.customview.CustomViewPager
                                 android:id="@+id/rvVerticalBanner"
                                 android:layout_width="match_parent"
-                                android:layout_height="234dp" />
+                                android:layout_height="234dp"
+                                tools:ignore="SpeakableTextPresentCheck" />
 
                         </LinearLayout>
 

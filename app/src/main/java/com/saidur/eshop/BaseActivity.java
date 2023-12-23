@@ -15,6 +15,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,7 +26,9 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,9 +37,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.NestedScrollView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.saidur.eshop.db.MainDB;
 import com.saidur.eshop.utils.Consts;
 import com.saidur.eshop.utils.CustomPD;
 import com.saidur.eshop.utils.RequestParamUtils;
+import com.saidur.eshop.view.FragmentCart;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -44,11 +52,14 @@ import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
     String language;
+    MainDB dbMain;
     public ImageView ivBack, ivLogo;
-    public ImageView ivWhatsappDrag;
     public SharedPreferences sharedpreferences;
     public CustomPD pd;
     public LinearLayout llHome, llSearchFromBottom, llCart, llAccount, llWishList, llBottomBar, llBottomLine;
+    FrameLayout flCart;
+    TextView tvToolCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -291,5 +302,131 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    public void setCount() {
+        ImageView ivBottomCart = findViewById(R.id.ivBottomCart);
+        TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
+        TextView tvBottomCart = findViewById(R.id.tv_cart_title);
+        if (Consts.Is_what) {
+            llCart.setVisibility(View.VISIBLE);
+            tvBottomCartCount.setVisibility(View.GONE);
+           // ivBottomCart.setImageResource(R.drawable.ic_coupon);
+           // tvBottomCart.setText(getResources().getString(R.string.my_reward));
+        } else {
+            llCart.setVisibility(View.VISIBLE);
+            if (new MainDB(this).getFromCart(0).size() > 0) {
+                tvBottomCartCount.setText(String.valueOf(new MainDB(this).getFromCart(0).size()));
+                tvBottomCartCount.setVisibility(View.VISIBLE);
+            } else {
+                tvBottomCartCount.setVisibility(View.GONE);
+            }
 
+           // ivBottomCart.setImageResource(R.drawable.ic_cart_gray);
+           // tvBottomCart.setText(getResources().getString(R.string.cart));
+        }
+    }
+
+
+    public void showCart() {
+        flCart = findViewById(R.id.flCart);
+        tvToolCart = findViewById(R.id.tvToolCart);
+        dbMain = new MainDB(this);
+        if (tvToolCart != null && flCart != null) {
+            Drawable unwrappedDrawable = tvToolCart.getBackground();
+            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+            DrawableCompat.setTint(wrappedDrawable, Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+            ((ImageView) findViewById(R.id.ivCart)).setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
+
+            if (dbMain.getFromCart(0).size() > 0) {
+                tvToolCart.setText(String.valueOf(dbMain.getFromCart(0).size()));
+                tvToolCart.setVisibility(View.VISIBLE);
+                flCart.setVisibility(View.VISIBLE);
+            } else {
+                tvToolCart.setVisibility(View.GONE);
+                flCart.setVisibility(View.GONE);
+            }
+            flCart.setOnClickListener(view -> {
+             /*   Intent intent = new Intent(BaseActivity.this, .class);
+                startActivity(intent);*/
+                FragmentCart cart=new FragmentCart();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_container, cart)
+                        .addToBackStack(MainActivity.class.getSimpleName())
+                        .commit();
+
+            });
+        }
+
+        TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
+        if (tvBottomCartCount != null) {
+            if (new MainDB(this).getFromCart(0).size() > 0) {
+                tvBottomCartCount.setText(String.valueOf(new MainDB(this).getFromCart(0).size()));
+                tvBottomCartCount.setVisibility(View.VISIBLE);
+            } else {
+                tvBottomCartCount.setVisibility(View.GONE);
+            }
+        }
+
+        if (tvToolCart != null && flCart != null) {
+            if (Consts.IS_CATALOG_MODE_OPTION) {
+                flCart.setVisibility(View.GONE);
+                tvToolCart.setVisibility(View.GONE);
+                if (tvBottomCartCount != null) tvBottomCartCount.setVisibility(View.GONE);
+            } else {
+                if (dbMain.getFromCart(0).size() > 0) {
+                    tvToolCart.setVisibility(View.VISIBLE);
+                    if (tvBottomCartCount != null) tvBottomCartCount.setVisibility(View.VISIBLE);
+                } else {
+                    tvToolCart.setVisibility(View.GONE);
+                    if (tvBottomCartCount != null) tvBottomCartCount.setVisibility(View.GONE);
+                }
+                flCart.setVisibility(View.VISIBLE);
+            }
+        }
+//        tvToolCart.getBackground().setColorFilter(Color.parseColor(getPreferences().getString(Constant.SECOND_COLOR, Constant.SECONDARY_COLOR)), PorterDuff.Mode.SRC_IN);
+    }
+
+    public void showCartAnimation() {
+
+
+        try {
+            FrameLayout flCart = findViewById(R.id.flCart);
+            TextView tvToolCart = findViewById(R.id.tvToolCart);
+            LinearLayout llmaincart = findViewById(R.id.llmainCart);
+
+
+            YoYo.with(Techniques.BounceInUp).duration(700).repeat(0).playOn(flCart);
+            YoYo.with(Techniques.BounceInUp).duration(700).repeat(0).playOn(llmaincart);
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "showCartAnimation: " + e.getMessage());
+        }
+
+
+    }
+
+    public void pulseAnimation(View view) {
+
+
+        try {
+
+            YoYo.with(Techniques.Pulse).duration(700).repeat(Animation.INFINITE).playOn(view);
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "showCartAnimation: " + e.getMessage());
+        }
+
+
+    }
+
+    public void vibrateononadd() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.EFFECT_TICK));
+        } else {
+            vibrator.vibrate(100);
+        }
+
+    }
 }
