@@ -71,6 +71,7 @@ ActivityMainBinding binding;
                 break;
             case R.id.ivBottomCart:
                 fragment = new FragmentCart();
+
       /*        binding.btnSettings.setBackgroundResource(R.drawable.shape_rect);
                 binding.btnReports.setBackgroundResource(0);
                 binding.btnDashboard.setBackgroundResource(0);

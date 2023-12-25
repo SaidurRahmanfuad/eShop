@@ -36,6 +36,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -406,8 +407,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void pulseAnimation(View view) {
-
-
         try {
 
             YoYo.with(Techniques.Pulse).duration(700).repeat(Animation.INFINITE).playOn(view);
@@ -429,4 +428,12 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
+    public void goto_cart(Fragment frag){
+        //FragmentCart cart=new FragmentCart();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, frag)
+                .addToBackStack(MainActivity.class.getSimpleName())
+                .commit();
+    };
 }

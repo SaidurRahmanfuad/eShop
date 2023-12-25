@@ -37,7 +37,7 @@ public class PresenterHome implements IHome.Presenter {
                 public void onResponse(@NonNull Call<BannerResponse> call, @NonNull Response<BannerResponse> response) {
                  if(response.isSuccessful())
                  {
-                     view.onViewBanner( response.body().getResult());
+                     view.onViewBanner(response.body().getResult());
                  }
                 }
 

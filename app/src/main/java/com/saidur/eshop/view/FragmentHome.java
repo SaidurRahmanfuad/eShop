@@ -208,7 +208,8 @@ public class FragmentHome extends BaseFragment implements IHome.view {
         dots = new ImageView[length];
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new ImageView(requireActivity());
-            dots[i].setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_space, null));
+            //dots[i].setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_space, null));
+            dots[i].setImageDrawable(requireActivity().getResources().getDrawable(R.drawable.ic_space));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 0, 15, 0);
             dots[i].setLayoutParams(lp);
