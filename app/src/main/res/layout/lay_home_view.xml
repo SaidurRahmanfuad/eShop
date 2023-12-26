@@ -66,7 +66,23 @@
                             android:orientation="vertical"
                             android:visibility="visible">
 
-                            <FrameLayout
+                            <com.smarteist.autoimageslider.SliderView
+                                android:id="@+id/slider"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                app:sliderAnimationDuration="600"
+                                app:sliderAutoCycleDirection="back_and_forth"
+                                app:sliderIndicatorAnimationDuration="600"
+                                app:sliderIndicatorEnabled="true"
+                                app:sliderIndicatorGravity="end|bottom"
+                                app:sliderIndicatorMargin="2dp"
+                                app:sliderIndicatorOrientation="horizontal"
+                                app:sliderIndicatorPadding="2dp"
+                                app:sliderIndicatorRadius="1.5dp"
+                                app:sliderIndicatorSelectedColor="#FF000000"
+                                app:sliderIndicatorUnselectedColor="#1d345f"
+                                app:sliderScrollTimeInSec="1" />
+                          <!--  <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -87,7 +103,8 @@
                                     android:gravity="end"
                                     android:orientation="horizontal" />
 
-                            </FrameLayout>
+
+                            </FrameLayout>-->
 
                         </LinearLayout>
 

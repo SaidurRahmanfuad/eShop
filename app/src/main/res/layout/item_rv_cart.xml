@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:orientation="vertical"
-    app:dragEdge="right"
-    app:mode="same_level">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/llDeleteBackground"
@@ -81,6 +79,7 @@
                     android:gravity="start"
                     android:singleLine="true"
                     android:text=""
+                    android:textColor="@color/black"
                     android:textAlignment="viewStart"
                     android:textDirection="locale" />
 

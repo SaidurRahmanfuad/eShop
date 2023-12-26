@@ -7,6 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class Consts {
+    public static String CURRENCYSYMBOLPOSTION = "left";
     public static boolean Is_what =false;
     public static boolean IS_LOGIN_SHOW = true;
     public static boolean IS_ADD_TO_CART_ACTIVE = true;

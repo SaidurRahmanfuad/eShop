@@ -136,7 +136,7 @@ public class MainDB extends SQLiteOpenHelper {
         return null;
     }
 
-    public int updateQuantity(int quantity, String product_id, String variation_id) {
+    public int updateQuantity(int quantity, String product_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -144,8 +144,8 @@ public class MainDB extends SQLiteOpenHelper {
         values.put(KEY_QUANTITY, quantity);
 
         // updating row
-        return db.update(TABLE_CART, values, KEY_PRODUCT_ID + " = ? AND " + KEY_VARIATION_ID + " = ?",
-                new String[]{String.valueOf(product_id), String.valueOf(variation_id)});
+        return db.update(TABLE_CART, values, KEY_PRODUCT_ID + " = ?",
+                new String[]{String.valueOf(product_id)});
     }
 
     public void deleteFromBuyNow(String productid) {

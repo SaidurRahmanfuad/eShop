@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EShop"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:node="merge"
+        tools:replace="android:allowBackup"
+        tools:targetApi="33">
         <activity
             android:name=".view.ActivityProductDetail"
             android:exported="false">

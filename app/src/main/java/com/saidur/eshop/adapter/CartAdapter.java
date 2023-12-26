@@ -26,11 +26,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.saidur.eshop.BaseActivity;
 import com.saidur.eshop.R;
+import com.saidur.eshop.customlistener.OnItemClickListener;
 import com.saidur.eshop.db.MainDB;
 import com.saidur.eshop.model.ModelCart;
+import com.saidur.eshop.model.ModelProduct;
 import com.saidur.eshop.utils.Consts;
+import com.saidur.eshop.utils.RequestParamUtils;
 
 import org.json.JSONObject;
 
@@ -42,9 +47,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     private List<ModelCart> list = new ArrayList<>();
     private final Activity activity;
-    //private final OnItemClickListener onItemClickListener;
+    private final OnItemClickListener onItemClickListener;
     private int width = 0, height = 0;
-    private final ViewBinderHelper binderHelper = new ViewBinderHelper();
+    //private final ViewBinderHelper binderHelper = new ViewBinderHelper();
     private final MainDB databaseHelper;
     String value;
     private int isBuyNow = 0;
@@ -52,8 +57,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public CartAdapter(Activity activity, OnItemClickListener onItemClickListener) {
         this.activity = activity;
         this.onItemClickListener = onItemClickListener;
-        databaseHelper = new DatabaseHelper(activity);
-        binderHelper.setOpenOnlyOne(true);
+        databaseHelper = new MainDB(activity);
+       // binderHelper.setOpenOnlyOne(true);
     }
 
     public void addAll(List<ModelCart> list) {
@@ -81,6 +86,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         if (list != null && 0 <= position && position < list.size()) {
+            ModelCart data=list.get(position);
+            String jproduct = list.get(position).getProduct();
+           /* List<ModelProduct> productList = new Gson().fromJson(product, new TypeToken<ModelProduct>() {
+            }.getType());*/
+            ModelProduct product=new Gson().fromJson(jproduct,ModelProduct.class);
 
             Drawable tvIncrement = holder.tvIncrement.getBackground();
             Drawable rappedDrawable = DrawableCompat.wrap(tvIncrement);
@@ -95,36 +105,50 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
             holder.tvPrice.setTextColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-            holder.txtVariation.setTextColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
-            holder.tvQuantity.setTextColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
             //holder.llDeleteBackground.setBackgroundColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Constant.SECOND_COLOR, Constant.SECONDARY_COLOR)));
             holder.tvDeleteCartBG.setTextColor(activity.getResources().getColor(R.color.color_main));
-
-            binderHelper.closeLayout(position + "");
-            if (!list.get(position).getCategoryList().averageRating.equals("")) {
-                holder.ratingBar.setRating(Float.parseFloat(list.get(position).get().averageRating));
+           /* if (!productList.get(position).getReview().equals("")) {
+                holder.ratingBar.setRating(Float.parseFloat(data.getProduct().));
             } else {
                 holder.ratingBar.setRating(0);
-            }
-            if (list.get(position).getCategoryList().images.size() > 0) {
-                holder.ivImage.setVisibility(View.VISIBLE);
-                holder.ivImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(activity.getBaseContext()).load(list.get(position).getCategoryList().appthumbnail)
-                        .error(R.drawable.no_image_available)
-//                        .fit()
-                        .transform(new RoundedCorners(5))
-                        .into(holder.ivImage);
-            } else {
-                holder.ivImage.setVisibility(View.INVISIBLE);
+            }*/
+            if(product.getRatings()>0)
+            {
+                holder.ratingBar.setRating(Float.parseFloat(String.valueOf(product.getRatings())));
+            }else {
+                holder.ratingBar.setRating(0);
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            tvProductName.setText(categoryList.name + "");
-                holder.tvName.setText(Html.fromHtml(list.get(position).getCategoryList().name + "", Html.FROM_HTML_MODE_LEGACY));
-            } else {
-//            tvProductName.setText(categoryList.name + "");
-                holder.tvName.setText(Html.fromHtml(list.get(position).getCategoryList().name + ""));
+            if(product.getPictures().size()>0)
+            {
+                String image = product.getPictures().get(0).getUrl();
+                Glide.with(activity.getBaseContext())
+                        .load(image)
+                        .error(R.drawable.no_image_available)
+                        .into(holder.ivImage);
+            }else {
+                holder.ivImage.setImageResource(R.drawable.placeholder);
             }
+
+            holder.tvName.setText(product.getName());
+            holder.tvPrice.setText(String.valueOf(product.getSale_price()));
+            holder.tvPrice.setTextSize(15);
+            holder.tvQuantity.setText(String.valueOf(data.getQuantity()));
+
+
+            holder.tvIncrement.setOnClickListener(v -> {
+                int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
+                quantity = quantity + 1;
+
+                holder.tvQuantity.setText(String.valueOf(quantity));
+                databaseHelper.updateQuantity(quantity, data.getProductid());
+                list.get(position).setQuantity(quantity);
+                onItemClickListener.onItemClick(position, RequestParamUtils.increment, quantity);
+            });
+
+          /*  binderHelper.closeLayout(position + "");
+
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 holder.tvPrice.setText(Html.fromHtml(list.get(position).getCategoryList().priceHtml, Html.FROM_HTML_MODE_COMPACT));
@@ -185,22 +209,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 }
             });
 
-            try {
-                JSONObject jObject = new JSONObject(list.get(position).getVariation());
-                Iterator<String> iterator = jObject.keys();
-                value = "";
-                while (iterator.hasNext()) {
-                    String key = (String) iterator.next();
-                    if (value.length() == 0) {
-                        value = String.format("%s%s : %s", value, key, jObject.getString(key));
-                    } else {
-                        value = String.format("%s, %s : %s", value, key, jObject.getString(key));
-                    }
-                }
-            } catch (Exception e) {
-                Log.e("exception is ", e.getMessage());
-            }
 
+*/
             if (value != null && !value.isEmpty()) {
                 holder.txtVariation.setVisibility(View.VISIBLE);
                 holder.txtVariation.setText(value);
@@ -208,7 +218,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 holder.txtVariation.setVisibility(View.GONE);
             }
 
-            holder.llDelete.setOnClickListener(v -> {
+         /*   holder.llDelete.setOnClickListener(v -> {
                 if (list.get(position).getCategoryList().type.equals(RequestParamUtils.variable)) {
                     databaseHelper.deleteVariationProductFromCart(list.get(position).getProductid(), list.get(position).getVariationid() + "");
                 } else {
@@ -217,12 +227,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 list.remove(position);
                 onItemClickListener.onItemClick(position, RequestParamUtils.delete, 0);
                 notifyDataSetChanged();
-            });
+            });*/
             //bind view over
         }
     }
 
-    public void removeItem(int position) {
+ /*   public void removeItem(int position) {
         if (list.get(position).getCategoryList().type.equals(RequestParamUtils.variable)) {
             databaseHelper.deleteVariationProductFromCart(list.get(position).getProductid(), list.get(position).getVariationid() + "");
         } else {
@@ -236,7 +246,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void saveStates(Bundle outState) {
         binderHelper.saveStates(outState);
     }
-
+*/
 
     @Override
     public int getItemCount() {
@@ -264,7 +274,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             tvQuantity = view.findViewById(R.id.tvQuantity);
             txtVariation = view.findViewById(R.id.txtVariation);
             tvPrice = view.findViewById(R.id.tvPrice);
-            //tvPrice1 = view.findViewById(R.id.tvPrice1);
             tvName = view.findViewById(R.id.tvName);
             ratingBar = view.findViewById(R.id.ratingBar);
             llDeleteBackground = view.findViewById(R.id.llDeleteBackground);

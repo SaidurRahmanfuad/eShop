@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import com.saidur.eshop.BaseFragment;
 import com.saidur.eshop.R;
 import com.saidur.eshop.adapter.BannerViewPagerAdapter;
+import com.saidur.eshop.adapter.BnrSliderAdapter;
 import com.saidur.eshop.adapter.CategoryAdapter;
 import com.saidur.eshop.adapter.ProductAdapter;
 import com.saidur.eshop.customview.GridSpacingItemDecoration;
@@ -34,6 +35,7 @@ import com.saidur.eshop.model.ModelCategory;
 import com.saidur.eshop.model.ModelProduct;
 import com.saidur.eshop.presentar.PresenterHome;
 import com.saidur.eshop.utils.Consts;
+import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +75,9 @@ public class FragmentHome extends BaseFragment implements IHome.view {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(getLayoutInflater());
+        binding = FragmentHomeBinding.inflate(inflater,container,false);
         presenter=new PresenterHome(this, requireActivity());
-        setView();
+        //setView();
         setCatView();
 
         presenter.getBanner();
@@ -108,12 +110,19 @@ public class FragmentHome extends BaseFragment implements IHome.view {
     public void onViewBanner(List<ModelBanner> result) {
         if (result != null) {
             if (result.size() > 0) {
-                bannerViewPagerAdapter.addAll(result);
+                BnrSliderAdapter adapter = new BnrSliderAdapter(requireActivity(), result);
+                binding.mainDiv.slider.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
+                binding.mainDiv.slider.setSliderAdapter(adapter);
+                binding.mainDiv.slider.setScrollTimeInSec(3);
+                binding.mainDiv.slider.setAutoCycle(true);
+                binding.mainDiv.slider.startAutoCycle();
+
+           /*     bannerViewPagerAdapter.addAll(result);
                 if (!isAutoScroll) {
                     addBottomDots(0, bannerViewPagerAdapter.getCount());
                     autoScroll();
                     isAutoScroll = true;
-                }
+                }*/
                 binding.mainDiv.llBanner.setVisibility(View.VISIBLE);
             } else {
                 binding.mainDiv.llBanner.setVisibility(View.GONE);
@@ -172,7 +181,7 @@ public class FragmentHome extends BaseFragment implements IHome.view {
         sharedpreferences = requireActivity().getSharedPreferences(Consts.MyPREFERENCES, Context.MODE_PRIVATE);
         return sharedpreferences;
     }
-    private void setView() {
+  /*  private void setView() {
         bannerViewPagerAdapter = new BannerViewPagerAdapter(requireActivity());
         binding.mainDiv.vpBanner.setAdapter(bannerViewPagerAdapter);
         binding.mainDiv.vpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -218,6 +227,6 @@ public class FragmentHome extends BaseFragment implements IHome.view {
         if (dots.length > 0 && dots.length >= currentPage) {
             dots[currentPage].setColorFilter(Color.parseColor(getPreferences().getString(Consts.SECOND_COLOR, Consts.SECONDARY_COLOR)));
         }
-    }
+    }*/
 
 }
