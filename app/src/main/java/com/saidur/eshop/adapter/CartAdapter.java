@@ -134,8 +134,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             holder.tvPrice.setText(String.valueOf(product.getSale_price()));
             holder.tvPrice.setTextSize(15);
             holder.tvQuantity.setText(String.valueOf(data.getQuantity()));
-
-
             holder.tvIncrement.setOnClickListener(v -> {
                 int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
                 quantity = quantity + 1;
@@ -145,120 +143,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 list.get(position).setQuantity(quantity);
                 onItemClickListener.onItemClick(position, RequestParamUtils.increment, quantity);
             });
-
-          /*  binderHelper.closeLayout(position + "");
-
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.tvPrice.setText(Html.fromHtml(list.get(position).getCategoryList().priceHtml, Html.FROM_HTML_MODE_COMPACT));
-            } else {
-                holder.tvPrice.setText(Html.fromHtml(list.get(position).getCategoryList().priceHtml));
-            }
-            holder.tvPrice.setTextSize(15);
-
-            ((BaseActivity) activity).setPrice(holder.tvPrice, list.get(position).get);
-
-            // holder.tvQuantity.setTextColor(Color.parseColor(((BaseActivity) activity).getPreferences().getString(Constant.APP_COLOR, Constant.PRIMARY_COLOR)));
-            holder.tvQuantity.setText(String.valueOf(list.get(position).getQuantity()));
-
-            holder.tvIncrement.setOnClickListener(v -> {
-                int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
-                quantity = quantity + 1;
-
-                if (list.get(position).isManageStock()) {
-                    if (quantity > list.get(position).getCategoryList().stockQuantity) {
-                        Toast.makeText(activity, activity.getString(R.string.only) + " " + list.get(position).getCategoryList().stockQuantity + " " + activity.getString(R.string.quntity_is_avilable), Toast.LENGTH_SHORT).show();
-                    } else {
-                        holder.tvQuantity.setText(String.valueOf(quantity));
-                        databaseHelper.updateQuantity(quantity, list.get(position).getProductid(), list.get(position).getVariationid() + "");
-                        list.get(position).setQuantity(quantity);
-                        onItemClickListener.onItemClick(position, RequestParamUtils.increment, quantity);
-                    }
-                } else {
-                    holder.tvQuantity.setText(String.valueOf(quantity));
-                    databaseHelper.updateQuantity(quantity, list.get(position).getProductid(), list.get(position).getVariationid() + "");
-                    list.get(position).setQuantity(quantity);
-                    onItemClickListener.onItemClick(position, RequestParamUtils.increment, quantity);
-                }
-            });
-
-            holder.tvDecrement.setOnClickListener(v -> {
-                int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
-                quantity = quantity - 1;
-                if (quantity < 1) {
-                    quantity = 1;
-                }
-                holder.tvQuantity.setText(String.valueOf(quantity));
-                databaseHelper.updateQuantity(quantity, list.get(position).getProductid(), list.get(position).getVariationid() + "");
-                list.get(position).setQuantity(quantity);
-                onItemClickListener.onItemClick(position, RequestParamUtils.decrement, quantity);
-            });
-
-            holder.llMain.setOnClickListener(view -> {
-                if (isBuyNow == 0) {
-                    if (list.get(position).getCategoryList().type.equals(RequestParamUtils.external)) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(list.get(position).getCategoryList().externalUrl));
-                        activity.startActivity(browserIntent);
-                    } else {
-                        Constant.CATEGORYDETAIL = list.get(position).getCategoryList();
-                        Intent intent = new Intent(activity, ProductDetailActivity.class);
-                        intent.putExtra(RequestParamUtils.ID, list.get(position).getCategoryList().id);
-                        activity.startActivity(intent);
-                    }
-                }
-            });
-
-
-*/
-            if (value != null && !value.isEmpty()) {
-                holder.txtVariation.setVisibility(View.VISIBLE);
-                holder.txtVariation.setText(value);
-            } else {
-                holder.txtVariation.setVisibility(View.GONE);
-            }
-
-         /*   holder.llDelete.setOnClickListener(v -> {
-                if (list.get(position).getCategoryList().type.equals(RequestParamUtils.variable)) {
-                    databaseHelper.deleteVariationProductFromCart(list.get(position).getProductid(), list.get(position).getVariationid() + "");
-                } else {
-                    databaseHelper.deleteFromCart(list.get(position).getProductid());
-                }
-                list.remove(position);
-                onItemClickListener.onItemClick(position, RequestParamUtils.delete, 0);
-                notifyDataSetChanged();
-            });*/
-            //bind view over
         }
     }
-
- /*   public void removeItem(int position) {
-        if (list.get(position).getCategoryList().type.equals(RequestParamUtils.variable)) {
-            databaseHelper.deleteVariationProductFromCart(list.get(position).getProductid(), list.get(position).getVariationid() + "");
-        } else {
-            databaseHelper.deleteFromCart(list.get(position).getProductid());
-        }
-        list.remove(position);
-        onItemClickListener.onItemClick(position, RequestParamUtils.delete, 0);
-        notifyDataSetChanged();
-    }
-
-    public void saveStates(Bundle outState) {
-        binderHelper.saveStates(outState);
-    }
-*/
-
     @Override
     public int getItemCount() {
         return list.size();
     }
-
     public static class CartViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivImage, tvDecrement, tvIncrement, ivDeleteRight;
         LinearLayout llDelete;
         public RelativeLayout llMain, llDeleteBackground;
-        TextView tvQuantity, txtVariation, tvName,tvPrice,tvDeleteCartBG;
+        TextView tvQuantity,tvName,tvPrice,tvDeleteCartBG;
         RatingBar ratingBar;
 
 
@@ -272,14 +168,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             llDelete = view.findViewById(R.id.ll_Delete);
             llMain = view.findViewById(R.id.llMain);
             tvQuantity = view.findViewById(R.id.tvQuantity);
-            txtVariation = view.findViewById(R.id.txtVariation);
             tvPrice = view.findViewById(R.id.tvPrice);
             tvName = view.findViewById(R.id.tvName);
             ratingBar = view.findViewById(R.id.ratingBar);
             llDeleteBackground = view.findViewById(R.id.llDeleteBackground);
         }
     }
-
     public void getWidthAndHeight() {
         int height_value = 90;
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -287,7 +181,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         width = displayMetrics.widthPixels / 2 - 20;
         height = width - height_value;
     }
-
     @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);

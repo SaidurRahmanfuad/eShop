@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -19,6 +18,13 @@
         tools:node="merge"
         tools:replace="android:allowBackup"
         tools:targetApi="33">
+        <activity
+            android:name=".view.ActivityCheckout"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".view.ActivityProductDetail"
             android:exported="false">

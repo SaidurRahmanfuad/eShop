@@ -2,13 +2,19 @@ package com.saidur.eshop.request;
 
 public class Omaster {
     int id;
-    int orderNo;
+    String orderNo;
     int productCount;
     float totalPrice;
     float totalDiscount;
     float netTotal;
 
-    public Omaster() {
+    public Omaster(int id, String orderNo, int productCount, float totalPrice, float totalDiscount, float netTotal) {
+        this.id = id;
+        this.orderNo = orderNo;
+        this.productCount = productCount;
+        this.totalPrice = totalPrice;
+        this.totalDiscount = totalDiscount;
+        this.netTotal = netTotal;
     }
 
     public int getId() {
@@ -19,11 +25,11 @@ public class Omaster {
         this.id = id;
     }
 
-    public int getOrderNo() {
+    public String getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(int orderNo) {
+    public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
 

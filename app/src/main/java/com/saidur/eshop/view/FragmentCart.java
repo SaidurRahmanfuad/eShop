@@ -1,6 +1,8 @@
 package com.saidur.eshop.view;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,21 +26,31 @@ import com.saidur.eshop.customlistener.OnItemClickListener;
 import com.saidur.eshop.databinding.FragmentCartBinding;
 import com.saidur.eshop.databinding.FragmentHomeBinding;
 import com.saidur.eshop.db.MainDB;
+import com.saidur.eshop.interfac.IOrder;
 import com.saidur.eshop.model.ModelCart;
 import com.saidur.eshop.model.ModelProduct;
+import com.saidur.eshop.presentar.PresenterOrder;
+import com.saidur.eshop.request.ORequest;
+import com.saidur.eshop.request.Obody;
+import com.saidur.eshop.request.Omaster;
 import com.saidur.eshop.utils.Consts;
 import com.saidur.eshop.utils.RequestParamUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentCart extends Fragment implements OnItemClickListener {
+public class FragmentCart extends Fragment implements OnItemClickListener, IOrder.view {
 
     FragmentCartBinding binding;
     CartAdapter cartAdapter;
     List<ModelCart> cartList;
     MainDB dbHelper;
-
+    PresenterOrder presenterOrder;
+    ProgressDialog pd;
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -50,7 +63,7 @@ public class FragmentCart extends Fragment implements OnItemClickListener {
         return fragment;
     }
 
-    MainDB dbmain;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,11 +77,13 @@ public class FragmentCart extends Fragment implements OnItemClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentCartBinding.inflate(inflater,container,false);
-        dbmain = new MainDB(requireActivity());
+        presenterOrder=new PresenterOrder(this,requireActivity());
+        pd=new ProgressDialog(requireActivity());
+        dbHelper = new MainDB(requireActivity());
         binding.iEmpty.llEmpty.setVisibility(View.GONE);
 
 
-        //setClickEvent();
+        setClickEvent();
         //setToolbarTheme();
         // setThemeColor();
         // setScreenLayoutDirection();
@@ -98,7 +113,7 @@ public class FragmentCart extends Fragment implements OnItemClickListener {
     @SuppressLint("SetTextI18n")
     public void getCartData() {
         Log.e("TAG", "getCartData: " + "get Cart Data");
-        cartList = dbmain.getFromCart(0);
+        cartList = dbHelper.getFromCart(0);
         if (cartList.size() > 0) {
             for (int i = 0; i < cartList.size(); i++) {
 
@@ -194,9 +209,7 @@ public class FragmentCart extends Fragment implements OnItemClickListener {
                 } else {
                     setTotalCount();
                 }
-
-
-           /*     TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
+             /*     TextView tvBottomCartCount = findViewById(R.id.tvBottomCartCount);
                 if (tvBottomCartCount != null) {
                     if (new MainDB(requireActivity()).getFromCart(0).size() > 0) {
                         tvBottomCartCount.setText(String.valueOf(new MainDB(requireActivity()).getFromCart(0).size()));
@@ -214,5 +227,66 @@ public class FragmentCart extends Fragment implements OnItemClickListener {
                 dbHelper.deleteFromBuyNow(outpos + "");
                 break;
         }
+    }
+
+    public void setClickEvent() {
+        binding.tvContinue.setOnClickListener(v -> {
+            binding.llPlaceOrder.setVisibility(View.VISIBLE);
+            binding.tvContinue.setVisibility(View.GONE);
+        });
+        binding.llPlaceOrder.setOnClickListener(v -> {
+            Omaster master=new Omaster(0,binding.userMobile.getText().toString().trim(),0,0,0,0);
+            List<Obody> bodyList=new ArrayList<>();
+
+
+            List<ModelCart> cartList = dbHelper.getFromCart(0);
+            if (cartList.size() > 0) {
+                try {
+                    for (int i = 0; i < cartList.size(); i++) {
+                        ModelProduct product=new Gson().fromJson(cartList.get(i).getProduct(),ModelProduct.class);
+                        Obody obody=new Obody();
+                        obody.setEcomPendingOrderMasterId(0);
+                        obody.setId(0);
+                        obody.setProductId(product.getId());
+                        obody.setName(product.getName());
+                        obody.setQty(cartList.get(i).getQuantity());
+                        obody.setStock(0);
+                        obody.setPrice(0);
+                        obody.setSalePrice(Float.parseFloat(String.valueOf(product.getSale_price())));
+                        obody.setUrl(product.getPictures().get(0).getUrl());
+                        obody.setSku("SKU123");
+                        obody.setProductGroupId(1);
+                        obody.setProductTypeId(1);
+                        obody.setProductCategoryId(1);
+                        obody.setProductSubCategoryId(1);
+                        obody.setProductSizeId(1);
+                        obody.setProductColorId(1);
+                        obody.setProductBrandId(1);
+
+                        bodyList.add(obody);
+                    }
+
+                } catch (Exception e) {
+                    Log.e("error", e.getMessage());
+                }
+            }
+            ORequest request=new ORequest(master,bodyList);
+            pd.setTitle("Placing order");
+            pd.setMessage("Please wait..");
+            pd.show();
+            presenterOrder.orderSubmit(request);
+
+
+        });
+
+    }
+
+    @Override
+    public void onPlaceOrderStatus(String msd) {
+        if(pd!=null || pd.isShowing())
+        {
+            pd.dismiss();
+        }
+        Toast.makeText(requireActivity(), msd, Toast.LENGTH_SHORT).show();
     }
 }
